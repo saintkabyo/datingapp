@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use DateTime;
 
 class User extends Authenticatable
 {
@@ -34,4 +35,45 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function age()
+    {
+        return DateTime::createFromFormat('Y-m-d', $this->dob)
+        ->diff(new DateTime('now'))
+        ->y;
+    }
+
+    public function distance()
+    {
+        $latFrom = deg2rad(auth()->user()->latitude);
+        $lonFrom = deg2rad(auth()->user()->longitude);
+        $latTo = deg2rad($this->latitude);
+        $lonTo = deg2rad($this->longitude);
+        
+        $latDelta = $latTo - $latFrom;
+        $lonDelta = $lonTo - $lonFrom;
+      
+        $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
+          cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+
+        return ceil($angle * 6371);
+    }
+
+    public function scopeNearby($query)
+    {
+        $unit = 6371;
+        $lat = auth()->user()->latitude;
+        $lng = auth()->user()->longitude;
+        $radius = 200;
+
+        $sql =  "($unit * ACOS(COS(RADIANS($lat))
+                * COS(RADIANS(latitude))
+                * COS(RADIANS($lng) - RADIANS(longitude))
+                + SIN(RADIANS($lat))
+                * SIN(RADIANS(latitude))))";
+
+        return $query->whereRaw($sql.'<='.$radius)
+            ->select(\DB::raw("*, $sql AS distance")
+            )->orderBy('distance','asc');
+    }
 }
