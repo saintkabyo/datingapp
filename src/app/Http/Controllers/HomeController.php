@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Like;
 
 class HomeController extends Controller
 {
@@ -41,5 +42,17 @@ class HomeController extends Controller
                             ->simplePaginate($view == 'grid' ? 9 : 1);
                             
         return view('home',$data);
+    }
+
+    public function feedback(Request $request)
+    {
+        $target_user_id = $request->target_user_id;
+        $liked = $request->liked ? true : false;
+
+        Like::updateOrCreate(['user_id'=>auth()->user()->id,'target_user_id'=>$target_user_id],['liked'=>$liked]);
+
+        $target_user = User::find($target_user_id);
+
+        return response()->json(['status'=>1,'matched'=>$target_user->matched()]);
     }
 }

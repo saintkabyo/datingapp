@@ -76,4 +76,29 @@ class User extends Authenticatable
             ->select(\DB::raw("*, $sql AS distance")
             )->orderBy('distance','asc');
     }
+
+    public function likes()
+    {
+        return $this->hasMany('App\Like');
+    }
+
+    public function liked()
+    {
+        return auth()->user()->likes()->where('target_user_id',$this->id)->where('liked',1)->exists();
+    }
+
+    public function disliked()
+    {
+        return auth()->user()->likes()->where('target_user_id',$this->id)->where('liked',0)->exists();
+    }
+
+    public function likedme()
+    {   
+        return $this->likes()->where('target_user_id',auth()->user()->id)->where('liked',1)->exists();
+    }
+
+    public function matched()
+    {
+        return $this->liked() && $this->likedme();
+    }
 }

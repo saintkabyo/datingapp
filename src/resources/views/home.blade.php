@@ -33,6 +33,25 @@ $(document).ready(function(){
     $('input[name="v"],select[name="g"]').change(function(){
         $('form[name="filter"]').submit();
     });
+
+    $(".feedback").click(function(){
+        var target_user_id = $(this).attr('target_user_id');
+        var liked = $(this).attr('liked');
+
+        $.ajax({
+            type:'GET',
+            url:'{{route("feedback")}}',
+            data:{target_user_id:target_user_id,liked:liked},
+            success:function(response){
+                if(response.matched)
+                {
+                    alert("It's a Match!");
+                }
+            }
+        });
+
+        window.location.href = window.location.href;
+    });
 });
 </script>
 @endpush

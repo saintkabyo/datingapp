@@ -5,8 +5,11 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
                 <div class="card-body">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Register</h1>
+                    </div>
+
                     @if($errors->has('longitude') || $errors->has('latitude'))
                         <div class="alert alert-danger">
                             Location data not found! Please allow us to access your location data. 
