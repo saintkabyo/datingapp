@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Intervention\Image\Facades\Image as Image;
 
 class RegisterController extends Controller
 {
@@ -52,6 +53,11 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'gender' => ['required'],
+            'dob' => ['required'],
+            'photo' => ['required','image'],
+            'latitude' => ['required'],
+            'longitude' => ['required']
         ]);
     }
 
@@ -63,10 +69,31 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        $user = new User;
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->password = Hash::make($data['password']);
+        $user->gender = $data['gender'];
+        $user->dob = date('Y-m-d',strtotime($data['dob']));
+        $user->latitude = $data['latitude'];
+        $user->longitude = $data['longitude'];
+        $user->save();
+
+        $photo = $data['photo'];
+        $ext = $photo->extension();
+        $photofileName = 'uploads/users/photos/'.$user->id.'.'.$ext;
+        $photo = Image::make($photo)->resize(300, 300);
+        \Storage::disk('public')->put( $photofileName, $photo->encode());
+
+        $user->photo = $photofileName;
+        $user->save();
+
+        return $user;
+        
+        // return User::create([
+        //     'name' => $data['name'],
+        //     'email' => $data['email'],
+        //     'password' => Hash::make($data['password']), 
+        // ]);
     }
 }
