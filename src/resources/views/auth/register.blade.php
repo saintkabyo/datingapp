@@ -22,7 +22,7 @@
                     <div class="row">
                         <div class="col-md-8">
                             <div class="form-group row">
-                                <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
+                                <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }} <span class="text-danger">*</span></label>
                                 <div class="col-md-6">
                                     {{Form::text('name',null,['id'=>'name','class'=>'form-control '.($errors->has('name') ? 'is-invalid' : ''),'autocomplete'=>'name','autofocus'=>true])}}
                                     @error('name')
@@ -34,7 +34,7 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+                                <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }} <span class="text-danger">*</span></label>
                                 <div class="col-md-6">
                                     {{Form::email('email',null,['id'=>'email','class'=>'form-control '.($errors->has('email') ? 'is-invalid' : ''),'autocomplete'=>'email'])}}
                                     @error('email')
@@ -46,14 +46,14 @@
                             </div>
 
                             <div class="form-group row">
-                                <label class="col-md-4 col-form-label text-md-right">{{ __('Gender') }}</label>
+                                <label class="col-md-4 col-form-label text-md-right">{{ __('Gender') }} <span class="text-danger">*</span></label>
                                 <div class="col-md-6">
-                                    <div class="form-check form-check-inline">
-                                        {{Form::radio('gender','Male',false,['id'=>'gender_1','class'=>'form-check-input'.($errors->has('gender') ? 'is-invalid' : '')])}}
+                                    <div class="form-check form-check-inline @error('gender') is-invalid @enderror">
+                                        {{Form::radio('gender','Male',false,['id'=>'gender_1','class'=>'form-check-input'])}}
                                         <label class="form-check-label" for="gender_1">Male</label>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                        {{Form::radio('gender','Female',false,['id'=>'gender_2','class'=>'form-check-input'.($errors->has('gender') ? 'is-invalid' : '')])}}
+                                    <div class="form-check form-check-inline @error('gender') is-invalid @enderror">
+                                        {{Form::radio('gender','Female',false,['id'=>'gender_2','class'=>'form-check-input'])}}
                                         <label class="form-check-label" for="gender_2">Female</label>
                                     </div>
                                     @error('gender')
@@ -65,7 +65,7 @@
                             </div>                        
 
                             <div class="form-group row">
-                                <label for="dob" class="col-md-4 col-form-label text-md-right">{{ __('Date of Birth') }}</label>
+                                <label for="dob" class="col-md-4 col-form-label text-md-right">{{ __('Date of Birth') }} <span class="text-danger">*</span></label>
                                 <div class="col-md-6">
                                     {{Form::text('dob',null,['id'=>'dob','class'=>'date form-control '.($errors->has('dob') ? 'is-invalid' : ''),'autocomplete'=>'dob'])}}
                                     @error('dob')
@@ -77,7 +77,7 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
+                                <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }} <span class="text-danger">*</span></label>
                                 <div class="col-md-6">
                                     {{Form::password('password',['id'=>'password','class'=>'form-control '.($errors->has('password') ? 'is-invalid' : ''),'autocomplete'=>'new-password'])}}
                                     @error('password')
@@ -89,7 +89,7 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
+                                <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }} <span class="text-danger">*</span></label>
                                 <div class="col-md-6">
                                     {{Form::password('password_confirmation',['id'=>'password-confirm','class'=>'form-control','autocomplete'=>'new-password'])}}
                                 </div>
@@ -100,8 +100,8 @@
                                 <img src="{{asset('img/default/user.svg')}}" width="300" height="300" class="img-fluid img-thumbnail" style="margin: 5px auto;" id="photo_display">
                             </div>
                             <div class="form-group">
-                                <label for="photo">Photo (&#x2264; 150kb) <span class="text-danger">*</span></label>
-                                {{Form::file('photo',['id'=>'photo'])}}
+                                <label for="photo">Photo (&#x2264; 300kb) <span class="text-danger">*</span></label>
+                                {{Form::file('photo',['id'=>'photo','class'=> $errors->has('photo') ? 'is-invalid' : ''])}}
                                 @error('photo')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
