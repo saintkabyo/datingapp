@@ -82,10 +82,12 @@ class RegisterController extends Controller
         $photo = $data['photo'];
         $ext = $photo->extension();
         $photofileName = 'uploads/users/photos/'.$user->id.'.'.$ext;
-        $photo = Image::make($photo)->resize(300, 300);
+        $photo = Image::make($photo)->resize(300, 300, function($constraint){
+            $constraint->aspectRatio();
+        });
         \Storage::disk('public')->put( $photofileName, $photo->encode());
 
-        $user->photo = $photofileName;
+        $user->photo = 'storage/'.$photofileName;
         $user->save();
 
         return $user;

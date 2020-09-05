@@ -27,7 +27,7 @@ $factory->define(User::class, function (Faker $faker) {
         'latitude' => $faker->latitude($min = 20, $max = 27),
         'longitude' => $faker->longitude($min = 88, $max = 93),
         'gender' => ucfirst($gender),
-        'dob' => $faker->dateTimeThisCentury->format('Y-m-d'),
+        'dob' => $faker->dateTimeBetween($startDate = '-60 years', $endDate = '-18 years', $timezone = null)->format('Y-m-d'),
         'photo' => 'img/default/user.svg'
     ];
 });

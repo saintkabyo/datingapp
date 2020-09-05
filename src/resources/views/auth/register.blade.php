@@ -137,7 +137,8 @@ $(document).ready(function(){
 
     $(".date").datepicker({
         autoclose:true,
-        format:'dd-mm-yyyy'
+        format:'dd-mm-yyyy',
+        endDate: '-18Y'
     });
 
 	function showPhoto(input) {

@@ -64,7 +64,7 @@ class User extends Authenticatable
         $unit = 6371;
         $lat = auth()->user()->latitude;
         $lng = auth()->user()->longitude;
-        $radius = 200;
+        $radius = 50;
 
         $sql =  "($unit * ACOS(COS(RADIANS($lat))
                 * COS(RADIANS(latitude))

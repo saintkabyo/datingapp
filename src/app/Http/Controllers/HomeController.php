@@ -39,7 +39,7 @@ class HomeController extends Controller
         $data['users'] = User::where('id','!=',auth()->user()->id)
                             ->nearby()
                             ->where('gender',$gender)
-                            ->simplePaginate($view == 'grid' ? 9 : 1);
+                            ->simplePaginate($view == 'grid' ? 12 : 1);
                             
         return view('home',$data);
     }
