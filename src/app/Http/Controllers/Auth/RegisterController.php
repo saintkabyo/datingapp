@@ -56,8 +56,8 @@ class RegisterController extends Controller
             'gender' => ['required'],
             'dob' => ['required'],
             'photo' => ['required','image','max:300'],
-            'latitude' => ['required'],
-            'longitude' => ['required']
+            // 'latitude' => ['required'],
+            // 'longitude' => ['required']
         ]);
     }
 
@@ -69,14 +69,16 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $location = \Location::get(request()->ip());
+
         $user = new User;
         $user->name = $data['name'];
         $user->email = $data['email'];
         $user->password = Hash::make($data['password']);
         $user->gender = $data['gender'];
         $user->dob = date('Y-m-d',strtotime($data['dob']));
-        $user->latitude = $data['latitude'];
-        $user->longitude = $data['longitude'];
+        $user->latitude = $data['latitude'] ? $data['latitude'] : $location->latitude;
+        $user->longitude = $data['longitude'] ? $data['longitude'] : $location->longitude;
         $user->save();
 
         $photo = $data['photo'];
